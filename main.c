@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
     }
 
     int time = 0;
-    int step = 5;
+    int step = 8;
     pid_t lol[NB_PHILOSOPHES];
     i = 0;
     if (lol[i++] = fork() == 0)

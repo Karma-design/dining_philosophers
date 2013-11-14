@@ -7,7 +7,7 @@
 #include <time.h>
 //Include for sleep
 #include <unistd.h>
-
+#define PRINT
 static struct sembuf Reserver = {0, -1, 0};
 static struct sembuf Liberer = {0, 1, 0};
 
@@ -23,31 +23,48 @@ void philosophe(int pPosition, int mtx_fork[])
     while (1)
     {
         myState = THINK;
-        printf("Je suis le process %i et j'entre en état %i.\n", pPosition, myState);
+#ifdef PRINT
+        printf("Process : %i Etat : %i.\n", pPosition, myState);
+#endif
         //while (semop(semMemoire, &Reserver, 1) == -1 );
         sleep((int)rand() % 10);
-        printf("Je suis le process %i et j'ai fini de dormir.\n", pPosition);
+#ifdef PRINT
+        printf("Process : %i et j'ai fini de dormir.\n", pPosition);
+#endif
         //starving, looking for forks
         myState = STARVE;
-        printf("Je suis le process %i et j'entre en état %i.\n", pPosition, myState);
+#ifdef PRINT
+        printf("Process : %i Etat : %i.\n", pPosition, myState);
+#endif
         for (i = 1; ; ++i)
         {
-            printf("Je suis le process %i et je demande ma fourchette gauche (%i).\n", pPosition, gauche);
+#ifdef PRINT
+            printf("Process : %i et je demande ma fourchette gauche (%i).\n", pPosition, gauche);
+#endif
             if (semop(mtx_fork[gauche], &Reserver, 1) != -1 )
             {
-                printf("Je suis le process %i et j'ai obtenu ma fourchette gauche (%i).\n", pPosition, gauche);
+#ifdef PRINT
+                printf("Process : %i et j'ai obtenu ma fourchette gauche (%i).\n", pPosition, gauche);
+#endif
                 int j;
+                //sleep(1);
                 for (j = 1; ; ++j)
                 {
-                    printf("Je suis le process %i et je demande ma fourchette droite (%i).\n", pPosition, droite);
+#ifdef PRINT
+                    printf("Process : %i et je demande ma fourchette droite (%i).\n", pPosition, droite);
+#endif
                     if (semop(mtx_fork[droite], &Reserver, 1) != -1 )
                     {
-                        printf("Je suis le process %i et j'ai obtenu ma fourchette droite (%i).\n", pPosition, droite);
+#ifdef PRINT
+                        printf("Process : %i et j'ai obtenu ma fourchette droite (%i).\n", pPosition, droite);
+#endif
                         break;
                     }
                     else
                     {
-                        printf("Je suis le process %i et je n'ai pas obtenu ma fourchette droite (%i)(%i essais).\n", pPosition, droite, j);
+#ifdef PRINT
+                        printf("Process : %i et je n'ai pas obtenu ma fourchette droite (%i)(%i essais).\n", pPosition, droite, j);
+#endif
                         sleep(TIMESLICE_STARVE);
                     }
                 }
@@ -55,15 +72,22 @@ void philosophe(int pPosition, int mtx_fork[])
             }
             else
             {
-                printf("Je suis le process %i et je n'ai pas obtenu ma fourchette gauche (%i)(%i essais).\n", pPosition, gauche, i);
+#ifdef PRINT
+                printf("Process : %i et je n'ai pas obtenu ma fourchette gauche (%i)(%i essais).\n", pPosition, gauche, i);
+#endif
                 sleep((int)rand() % 2);
             }
         }
         myState = EAT;
-        printf("Je suis le process %i et j'entre en état %i.\n", pPosition, myState);
-        sleep((int)rand() % 5);
+#ifdef PRINT
+        printf("Process : %i Etat : %i.\n", pPosition, myState);
+#endif
+        printf("Process : %i Etat : %i.\n", pPosition, myState);
+        sleep((int)rand() % 15);
         semop(mtx_fork[gauche], &Liberer, 1);
         semop(mtx_fork[droite], &Liberer, 1);
-        printf("Je suis le process %i et je viens de libérer mes fourchettes.\n", pPosition);
+#ifdef PRINT
+        printf("Process : %i et je viens de libérer mes fourchettes.\n", pPosition);
+#endif
     }
 }
