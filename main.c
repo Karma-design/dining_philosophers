@@ -1,5 +1,5 @@
 #include "Philosophe.h"
-#include "wait.h"
+#include "sys/wait.h"
 #include <unistd.h>
 #include "sys/msg.h"
 #include "sys/sem.h"
