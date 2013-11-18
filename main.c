@@ -13,7 +13,7 @@ void my_handler_1(int s)
 int main(int argc, char const *argv[])
 {
 
-        //SIGINT handler
+    //SIGINT handler
     struct sigaction sigIntHandler;
 
     sigIntHandler.sa_handler = my_handler_1;
