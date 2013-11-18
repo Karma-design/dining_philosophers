@@ -1,5 +1,5 @@
 #include "Philosophe.h"
-#include "wait.h"
+#include "sys/wait.h"
 #include <unistd.h>
 #include "sys/sem.h"
 //Include for rand
@@ -7,12 +7,34 @@
 #include <time.h>
 //Include for sleep
 #include <unistd.h>
+//Include for signals
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
 #define PRINT
 static struct sembuf Reserver = {0, -1, 0};
 static struct sembuf Liberer = {0, 1, 0};
 
+
+void my_handler(int s)
+{
+    printf("Caught SIGINT %d\n", s);
+    exit(1);
+}
+
 void philosophe(int pPosition, int mtx_fork[])
 {
+
+    //SIGINT handler
+    struct sigaction sigIntHandler;
+
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, NULL);
+
+    //
     int gauche = pPosition;
     int droite = pPosition + 1 == NB_FOURCHETTES ? 0 : pPosition + 1;
     pPosition++; // Pour la lisibilité.
