@@ -8,5 +8,4 @@ typedef enum {THINK, STARVE, EAT} state;
 
 
 void my_handler(int);
-
-void philosophe(int, int);
+void philosophe(int, int*);
