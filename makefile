@@ -17,7 +17,7 @@ ${EXE}:${OBJETS}
 	${ECHO} "edl de ${EXE}"
 	${EDL} -o ${EXE} ${OBJETS} #${LIBS}
 
-%.o:%.cpp 
+%.o:%.c
 	${ECHO} "compile de <$<>"
 	${COMP} -c $<
 Main.o:Main.c

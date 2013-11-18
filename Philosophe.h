@@ -5,3 +5,8 @@
 #define CREDENTIAL 0660
 
 typedef enum {THINK, STARVE, EAT} state;
+
+
+void my_handler(int);
+
+void philosophe(int, int);

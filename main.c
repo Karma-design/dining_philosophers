@@ -12,7 +12,6 @@ void my_handler_1(int s)
 
 int main(int argc, char const *argv[])
 {
-
     //SIGINT handler
     struct sigaction sigIntHandler;
 
